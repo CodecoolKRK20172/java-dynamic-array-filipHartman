@@ -7,36 +7,33 @@ public class DynamicIntArray {
 
     private int[] array;
     private int size;
+    private int pointer;
 
     public DynamicIntArray() {
-        this.array = new int[DEFAULT_ARRAY_SIZE];
-        this.size = 0;
+        this(DEFAULT_ARRAY_SIZE);
     }
     public DynamicIntArray(int arraySize) {
         this.array = new int[arraySize];
-        this.size = 0;
+        this.size = arraySize;
+        this.pointer = 0;
     }
 
     public void add(int element) {
-        if(size < array.length) {
-            array[size++] = element;
+        if(pointer < size) {
+            array[pointer++] = element;
         } else {
             int[] temp = array;
             extendArray();
-            for (int tempElement : temp) {
-                add(tempElement);
-            }
+            System.arraycopy(temp, 0, array, 0, temp.length);
             add(element);
         }
 
     }
 
     public void remove(int element) {
-
     }
 
     public void insert(int index, int element) {
-
     }
 
     @Override
@@ -49,7 +46,8 @@ public class DynamicIntArray {
     }
 
     private void extendArray() {
-        this.array = new int[array.length + 1];
-        this.size = 0;
+        int newSize = array.length + 1;
+        this.array = new int[newSize];
+        this.size = newSize;
     }
 }
