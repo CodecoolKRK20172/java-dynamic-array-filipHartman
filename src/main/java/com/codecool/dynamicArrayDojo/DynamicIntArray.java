@@ -23,7 +23,7 @@ public class DynamicIntArray {
             array[pointer++] = element;
         } else {
             int[] temp = array;
-            extendArray();
+            changeArray(1);
             System.arraycopy(temp, 0, array, 0, temp.length);
             add(element);
         }
@@ -31,6 +31,24 @@ public class DynamicIntArray {
     }
 
     public void remove(int element) {
+
+        int index = findIndex(element);
+        if (index != -1) {
+            System.arraycopy(array, index + 1, array, index, array.length - 1 - index);
+            int[] temp = array;
+            changeArray(-1);
+            System.arraycopy(temp, 0, array, 0, array.length);
+            pointer--;
+        }
+    }
+
+    private int findIndex(int element) {
+        for (int i = 0; i < array.length; i++) {
+            if (element == array[i]) {
+                return i;
+            }
+        }
+        throw new ArrayIndexOutOfBoundsException();
     }
 
     public void insert(int index, int element) {
@@ -39,7 +57,7 @@ public class DynamicIntArray {
             add(element);
         } else {
             if(pointer >= size) {
-                extendArray();
+                changeArray(1);
                 System.arraycopy(temp, 0, array, 0, index);
             }
             array[index] = element;
@@ -57,8 +75,8 @@ public class DynamicIntArray {
         return sb.toString();
     }
 
-    private void extendArray() {
-        int newSize = array.length + 1;
+    private void changeArray(int change) {
+        int newSize = array.length + change;
         this.array = new int[newSize];
         this.size = newSize;
     }
