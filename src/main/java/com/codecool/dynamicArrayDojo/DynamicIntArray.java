@@ -3,7 +3,7 @@ package com.codecool.dynamicArrayDojo;
 
 // put your code here!
 public class DynamicIntArray {
-    public static final int DEFAULT_ARRAY_SIZE = 10;
+    private static final int DEFAULT_ARRAY_SIZE = 10;
 
     private int[] array;
     private int size;
@@ -34,13 +34,25 @@ public class DynamicIntArray {
     }
 
     public void insert(int index, int element) {
+        int[] temp = array;
+        if(index > size) {
+            add(element);
+        } else {
+            if(pointer >= size) {
+                extendArray();
+                System.arraycopy(temp, 0, array, 0, index);
+            }
+            array[index] = element;
+            System.arraycopy(temp, index, array, index + 1, temp.length - index);
+            pointer++;
+        }
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int element: array) {
-            sb.append(" " + element);
+            sb.append(" ").append(element);
         }
         return sb.toString();
     }
